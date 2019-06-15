@@ -4,22 +4,7 @@ import RowEmployees from './components/RowEmployees';
 class TableEmployees extends Component {
   constructor(props){
     super(props);
-    this.state = {
-      employeesArr : [
-        {
-          name: 'Thuyduyen',
-          email: 'nttduyen2211@gmail.com',
-          address: '47a pham van hai',
-          phone: '0932467082',
-        },
-        {
-          name: 'Thomas',
-          email: 'thomasphomai@gmail.com',
-          address: '47a pham van hai',
-          phone: '0000000000',
-        }
-      ]
-    }
+   
   }
     render() {
         return (
@@ -42,7 +27,7 @@ class TableEmployees extends Component {
               </thead>
               <tbody>
                 {
-                  this.state.employeesArr.map((item, index) => {
+                  this.props.data.map((item, index) => {
                     return  <RowEmployees key={index}  
                               toggleUpdateEmloyees = {this.props.toggleUpdate} 
                               toggleDeleteEmloyees = {this.props.toggleDelete} 
