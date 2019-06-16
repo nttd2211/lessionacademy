@@ -13,19 +13,17 @@ class Title extends Component {
                         <div className="col-sm-6">
                             <a 
                                 onClick={() => this.props.toggleAdd()}
-                                // href="#addEmployeeModal" 
                                 className="btn btn-success" 
                                 data-toggle="modal">
                                     <i className="material-icons"></i> 
                                     <span>Add New Employee</span>
                             </a>
-                            <a 
+                            {/* <a 
                                 onClick={() => this.props.toggleDelete()}
-                                // href="#deleteEmployeeModal" 
                                 className="btn btn-danger" 
                                 data-toggle="modal">
                                     <i className="material-icons"></i> 
-                                    <span>Delete</span></a>
+                                    <span>Delete</span></a> */}
                         </div>
                     </div>
                 </div>

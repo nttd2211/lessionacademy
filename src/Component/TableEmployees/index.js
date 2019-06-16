@@ -4,7 +4,6 @@ import RowEmployees from './components/RowEmployees';
 class TableEmployees extends Component {
   constructor(props){
     super(props);
-   
   }
     render() {
         return (
@@ -28,7 +27,8 @@ class TableEmployees extends Component {
               <tbody>
                 {
                   this.props.data.map((item, index) => {
-                    return  <RowEmployees key={index}  
+                    return  <RowEmployees 
+                              key={index}
                               toggleUpdateEmloyees = {this.props.toggleUpdate} 
                               toggleDeleteEmloyees = {this.props.toggleDelete} 
                               data={item} 

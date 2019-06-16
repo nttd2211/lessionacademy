@@ -10,18 +10,22 @@ class App extends React.Component {
       isShowModalAddEmployees: false,
       isShowModalUpdateEmployees: false,
       isShowModalDeleteEmployees: false,
+      index: null,
       name: '',
       email: '',
       address: '',
       phone: '',
+      currentArrUpdate: [],
       employeesArr: [
         {
+          index: 0,
           name: 'Thuyduyen',
           email: 'nttduyen2211@gmail.com',
           address: '47a pham van hai',
           phone: '0932467082',
         },
         {
+          index: 1,
           name: 'Thomas',
           email: 'thomasphomai@gmail.com',
           address: '47a pham van hai',
@@ -37,15 +41,36 @@ class App extends React.Component {
     })
   }
 
-  handleModalUpdateEmployees = () => {
+  handleModalUpdateEmployees = (index) => {
     this.setState({
-      isShowModalUpdateEmployees: !this.state.isShowModalUpdateEmployees
+      isShowModalUpdateEmployees: !this.state.isShowModalUpdateEmployees,
+      index: index,
+      currentArrUpdate: this.state.employeesArr[index],
     })
   }
 
-  handleModalDeleteEmployees = () => {
+  handleOkUpdate = () => {
+    const data = this.state.currentArrUpdate;
+    let result = this.state.employeesArr;
+    let dataUpdate = {
+          index: (this.state.index !== '') ? this.state.index : data.index,
+          name: (this.state.name !== '') ? this.state.name : data.name,
+          email: (this.state.email !== '') ? this.state.email : data.email,
+          address: (this.state.address !== '') ? this.state.address : data.address,
+          phone: (this.state.phone !== '') ? this.state.phone : data.phone,
+    }
+    result.splice(data.index,1);
+    result.splice(data.index,0,dataUpdate)
     this.setState({
-      isShowModalDeleteEmployees: !this.state.isShowModalDeleteEmployees
+      employeesArr: result
+    })
+   
+  }
+
+  handleModalDeleteEmployees = (index) => {
+    this.setState({
+      isShowModalDeleteEmployees: !this.state.isShowModalDeleteEmployees,
+      index: index,
     })
   }
 
@@ -56,10 +81,8 @@ class App extends React.Component {
     });
   }
 
-  handleAddSubmit = (e, string) => {
-    console.log(string)
+  handleAddSubmit = (e) => {
     e.preventDefault();
-    console.log(e,'0000000000000')
     let result = this.state.employeesArr;
     result.push({
       name: this.state.name,
@@ -68,26 +91,32 @@ class App extends React.Component {
       phone: this.state.phone,
     });
     this.setState({
-      employeesArr : result
+      employeesArr: result
+    })
+  }
+
+  handleDelete = (e) => {
+    e.preventDefault();
+    let result = this.state.employeesArr;
+    result.splice(this.state.index, 1)
+    this.setState({
+      employeesArr: result
     })
   }
 
   render() {
-   
     return (
-     
       <div>
-         <button onClick={() => this.handleAddSubmit()}>add</button>
         <div className="container">
           <div className="table-wrapper">
             <Title
               toggleAdd={() => this.handleModalAddEmployees()}
-              toggleDelete={() => this.handleModalDeleteEmployees()}
+            // toggleDelete={() => this.handleModalDeleteEmployees()}
             />
             <TableEmployees
               data={this.state.employeesArr}
-              toggleUpdate={() => this.handleModalUpdateEmployees()}
-              toggleDelete={() => this.handleModalDeleteEmployees()}
+              toggleUpdate={this.handleModalUpdateEmployees}
+              toggleDelete={this.handleModalDeleteEmployees}
             />
           </div>
         </div>
@@ -127,7 +156,7 @@ class App extends React.Component {
                       <input type="button" className="btn btn-default" data-dismiss="modal"
                         defaultValue="Cancel"
                         onClick={() => this.handleModalAddEmployees()} />
-                      <input  onClick={(e) => this.handleAddSubmit(e,'string')} className="btn btn-success" defaultValue="Add" />
+                      <input onClick={(e) => this.handleAddSubmit(e)} className="btn btn-success" defaultValue="Add" />
                     </div>
                   </form>
                 </div>
@@ -146,33 +175,49 @@ class App extends React.Component {
                       <h4 className="modal-title">Edit Employee</h4>
                       <button type="button" className="close"
                         data-dismiss="modal" aria-hidden="true"
-                        onClick={() => this.handleModalUpdateEmployees()}
+                        onClick={()=>this.handleModalUpdateEmployees()}
                       >×</button>
                     </div>
                     <div className="modal-body">
                       <div className="form-group">
                         <label>Name</label>
-                        <input type="text" className="form-control" required />
+                        <input type="text" className="form-control" required
+                          defaultValue={this.state.currentArrUpdate ? this.state.currentArrUpdate.name : ''}
+                          name="name"
+                          onChange={this.handleOnchange}
+                        />
                       </div>
                       <div className="form-group">
                         <label>Email</label>
-                        <input type="email" className="form-control" required />
+                        <input type="email" className="form-control" required
+                          defaultValue={this.state.currentArrUpdate ? this.state.currentArrUpdate.email : ''}
+                          name="email"
+                          onChange={this.handleOnchange}
+                        />
                       </div>
                       <div className="form-group">
                         <label>Address</label>
-                        <textarea className="form-control" required defaultValue={""} />
+                        <textarea className="form-control" required
+                          defaultValue={this.state.currentArrUpdate ? this.state.currentArrUpdate.address : ''}
+                          name="address"
+                          onChange={this.handleOnchange}
+                        />
                       </div>
                       <div className="form-group">
                         <label>Phone</label>
-                        <input type="text" className="form-control" required />
+                        <input type="text" className="form-control" required
+                          defaultValue={this.state.currentArrUpdate ? this.state.currentArrUpdate.phone : ''}
+                          name="phone"
+                          onChange={this.handleOnchange}
+                        />
                       </div>
                     </div>
                     <div className="modal-footer">
                       <input type="button" className="btn btn-default" data-dismiss="modal"
                         defaultValue="Cancel"
-                        onClick={() => this.handleModalUpdateEmployees()}
+                        onClick={()=>this.handleModalUpdateEmployees()}
                       />
-                      <input  className="btn btn-info" defaultValue="Save" />
+                      <input onClick={()=>this.handleOkUpdate()} className="btn btn-info" defaultValue="Save" />
                     </div>
                   </form>
                 </div>
@@ -195,14 +240,16 @@ class App extends React.Component {
                       onClick={() => this.handleModalDeleteEmployees()}>×</button>
                   </div>
                   <div className="modal-body">
-                    <p>Are you sure you want to delete these Records?</p>
+                    <p>Bạn có chắc chắn muốn xóa phần tử {this.state.index}</p>
                     <p className="text-warning"><small>This action cannot be undone.</small></p>
                   </div>
                   <div className="modal-footer">
                     <input type="button" className="btn btn-default" data-dismiss="modal"
                       defaultValue="Cancel"
                       onClick={() => this.handleModalDeleteEmployees()} />
-                    <input  className="btn btn-danger" defaultValue="Delete" />
+                    <input className="btn btn-danger" defaultValue="Delete"
+                      onClick={(e) => this.handleDelete(e)}
+                    />
                   </div>
                 </form>
               </div>
